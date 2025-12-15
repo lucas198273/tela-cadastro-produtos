@@ -8,7 +8,7 @@ export default function Footer() {
 
         {/* SOBRE */}
         <div className="flex flex-col gap-4">
-          <h3 className="text-3xl font-bold text-red-600 opacity-90">The Brothers</h3>
+          <h3 translate="no" className="text-3xl font-bold text-red-600 opacity-90">The Brothers</h3>
           <p className="text-sm leading-relaxed text-gray-200 opacity-90">
             Há 12 anos oferecendo hambúrguer artesanal com ingredientes frescos,
             sabor marcante e preparo dedicado. Qualidade e tradição em cada pedido.
@@ -57,7 +57,7 @@ export default function Footer() {
       </div>
 
       {/* COPYRIGHT */}
-      <div className="w-full border-t border-red-600 opacity-90 mt-12 pt-6 text-center text-sm text-gray-400">
+      <div translate="no" className="w-full border-t border-red-600 opacity-90 mt-12 pt-6 text-center text-sm text-gray-400">
         © {new Date().getFullYear()} The Brothers — Todos os direitos reservados.
       </div>
     </footer>

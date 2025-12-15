@@ -60,10 +60,12 @@ function AppContent() {
   <meta property="og:type" content="website" />
   <meta
     property="og:title"
+    translate="no"
     content="The Brothers Burguer | Hambúrguer Artesanal em Betim"
   />
   <meta
     property="og:description"
+    translate="no"
     content="Hambúrguer artesanal feito com blend especial e ingredientes frescos. Peça online e descubra a melhor experiência em Betim."
   />
   <meta

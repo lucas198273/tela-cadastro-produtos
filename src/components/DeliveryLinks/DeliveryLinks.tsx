@@ -25,6 +25,7 @@ export default function DeliveryLinks() {
           className="text-lg opacity-90 max-w-xl"
           data-aos="fade-up"
           data-aos-delay="100"
+          translate="no"
         >
           Escolha sua plataforma preferida e receba seu hambúrguer artesanal com toda
           qualidade The Brothers.
