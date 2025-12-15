@@ -9,7 +9,6 @@ import Hero from "./components/Hero/Hero";
 import About from "./components/About/About";
 import Footer from "./components/Footer/Footer";
 
-
 import ScrollTop from "./components/ScrollTop/ScrollTop";
 import ScrollToTopOnRouteChange from "./components/ScrollToTopOnRouteChange/ScrollToTopOnRouteChange";
 
@@ -19,6 +18,7 @@ import MenuShowCase from "./components/MenuShowCase/MenuShowCase";
 import SingleUnit from "./components/SingleUnit/SingleUnit";
 import InstagramGrid from "./components/InstagramGrid/InstagramGrid";
 import DeliveryLinks from "./components/DeliveryLinks/DeliveryLinks";
+
 function AppContent() {
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
@@ -40,56 +40,51 @@ function AppContent() {
           path="/"
           element={
             <>
-              <Helmet>
-                {/* SEO Básico */}
-                <title>The Brothers Burguer | Hambúrguer Artesanal em Betim</title>
-                <meta
-                  name="description"
-                  content="The Brothers Burguer — Hambúrguer artesanal feito com blend especial, pão macio, ingredientes frescos e muito sabor. Peça online e descubra a melhor experiência em hamburgueria artesanal de Betim."
-                />
-                <meta
-                  name="keywords"
-                  content="hambúrguer artesanal, hamburgueria betim, the brothers burguer, smash burger, burger artesanal, comida artesanal, hamburguer delivery"
-                />
-                <link rel="canonical" href="https://thebrothersburguer.com" />
+             <Helmet>
+  {/* ================= SEO BÁSICO ================= */}
+  <title>The Brothers Burguer | Hambúrguer Artesanal em Betim</title>
 
-            
-                {/* Schema.org — Restaurante */}
-                <script type="application/ld+json">
-                  {`
-                    {
-                      "@context": "https://schema.org",
-                      "@type": "Restaurant",
-                      "name": "The Brothers Burguer",
-                      "description": "Hambúrguer artesanal com blend exclusivo e ingredientes frescos em Betim.",
-                      "servesCuisine": "Hambúrguer Artesanal",
-                      "image": "https://thebrothersburguer.com/images/og-image.jpg",
-                      "priceRange": "$$",
-                      "address": {
-                        "@type": "PostalAddress",
-                        "addressLocality": "Betim",
-                        "addressRegion": "MG",
-                        "addressCountry": "BR"
-                      },
-                      "url": "https://thebrothersburguer.com",
-                      "sameAs": [
-                        "https://instagram.com/thebrothersburguer",
-                        "https://facebook.com/thebrothersburguer"
-                      ]
-                    }
-                  `}
-                </script>
-              </Helmet>
+  <meta
+    name="description"
+    content="The Brothers Burguer — Hambúrguer artesanal feito com blend especial, pão macio, ingredientes frescos e muito sabor. Peça online e descubra a melhor experiência em Betim."
+  />
+
+  <meta
+    name="keywords"
+    content="hambúrguer artesanal, hamburgueria betim, the brothers burguer, smash burger, burger artesanal, comida artesanal, hamburguer delivery"
+  />
+
+  <link rel="canonical" href="https://thebrothers-site.online" />
+
+  {/* ================= OPEN GRAPH ================= */}
+  <meta property="og:type" content="website" />
+  <meta
+    property="og:title"
+    content="The Brothers Burguer | Hambúrguer Artesanal em Betim"
+  />
+  <meta
+    property="og:description"
+    content="Hambúrguer artesanal feito com blend especial e ingredientes frescos. Peça online e descubra a melhor experiência em Betim."
+  />
+  <meta
+    property="og:image"
+    content="https://thebrothers-site.online/og-image.jpg"
+  />
+  <meta
+    property="og:url"
+    content="https://thebrothers-site.online"
+  />
+
+</Helmet>
+
 
               <main className="pt-14 min-h-screen flex flex-col">
                 <Hero />
-      
-                <MenuShowCase /> 
+                <MenuShowCase />
                 <DeliveryLinks />
                 <SingleUnit />
                 <About />
                 <InstagramGrid />
-
               </main>
             </>
           }
@@ -108,11 +103,9 @@ function AppContent() {
 export default function App() {
   return (
     <HelmetProvider>
-
-        <Router>
-          <AppContent />
-        </Router>
-
+      <Router>
+        <AppContent />
+      </Router>
     </HelmetProvider>
   );
 }

@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
+
+
+
 export default function Header() {
   const [open, setOpen] = useState(false);
+
+
+  const closeMenu = () => setOpen(false);
 
   return (
     <header className="w-full bg-[#FFF7F0] border-b border-red-100 fixed top-0 left-0 z-50">
@@ -61,8 +67,7 @@ export default function Header() {
 
           {/* DELIVERY */}
           <a
-            href="https://oia.99app.com/dlp9/9HkZ0K?area=BR"
-            target="_blank"
+            href="#plataformas"
             className="
               bg-red-600 opacity-90 text-white 
               px-3 py-2 
@@ -106,14 +111,14 @@ export default function Header() {
       {open && (
         <div className="md:hidden bg-[#FFF7F0] border-t border-red-100 px-6 py-5 flex flex-col gap-6 text-lg font-semibold text-red-900">
 
-          <a href="#unidade" className="hover:text-red-600 transition">UNIDADES</a>
-          <a href="#cardapio" className="hover:text-red-600 transition">CARDÁPIO</a>
-          <a href="#sobre" className="hover:text-red-600 transition">QUEM SOMOS</a>
+          <a href="#unidade" onClick={closeMenu} className="hover:text-red-600 transition">UNIDADES</a>
+          <a href="#cardapio" onClick={closeMenu} className="hover:text-red-600 transition">CARDÁPIO</a>
+          <a href="#sobre" onClick={closeMenu} className="hover:text-red-600 transition">QUEM SOMOS</a>
 
           {/* DELIVERY */}
           <a
-            href="https://www.ifood.com.br/delivery/betim-mg/the-brothers-burguers-angola/24644122-0506-43a8-b9ac-839089919b85"
-            target="_blank"
+            href="#plataformas"
+            onClick={closeMenu}
             className="
               bg-red-600 opacity-90 
               text-white px-6 py-3 
