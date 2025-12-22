@@ -25,7 +25,7 @@ const ScrollTop = () => {
   return (
     <button
       onClick={scrollToTop}
-      className="fixed bottom-5 right-5 z-50 bg-red-800 hover:bg-red-700 text-white p-3 rounded-full shadow-lg transition duration-300"
+      className="fixed bottom-5 right-5 z-50 bg-orange-300 hover:bg-orange-400 text-white p-3 rounded-full shadow-lg transition duration-300"
       aria-label="Voltar ao topo"
     >
       <ArrowUp size={24} />
