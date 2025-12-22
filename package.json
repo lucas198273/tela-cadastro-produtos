@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.30.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@prismicio/client": "^7.18.0",
     "@prismicio/react": "^3.2.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -18,7 +21,7 @@
     "dompurify": "^3.2.6",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.18.1",
+    "framer-motion": "^12.23.26",
     "gsap": "^3.13.0",
     "lucide-react": "^0.514.0",
     "react": "^18.2.0",

@@ -1,64 +1,130 @@
 "use client";
-import { FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
+
+import {
+  FaInstagram,
+  FaWhatsapp,
+  FaMapMarkerAlt,
+  FaEnvelope,
+} from "react-icons/fa";
 
 export default function Footer() {
   return (
     <footer className="w-full bg-black text-white py-16 px-6">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 opacity-90">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 opacity-95">
 
         {/* SOBRE */}
         <div className="flex flex-col gap-4">
-          <h3 translate="no" className="text-3xl font-bold text-red-600 opacity-90">The Brothers</h3>
-          <p className="text-sm leading-relaxed text-gray-200 opacity-90">
-            Há 12 anos oferecendo hambúrguer artesanal com ingredientes frescos,
-            sabor marcante e preparo dedicado. Qualidade e tradição em cada pedido.
-          </p>
-          <a href="/politicas" className="text-red-600 hover:text-red-700 transition">Política de Privacidade</a>
+          <h3
+            translate="no"
+            className="text-3xl font-bold text-[#C9A24D]"
+          >
+            HP Chaveiro
+          </h3>
 
-          {/* Redes sociais */}
+          <p className="text-sm leading-relaxed text-gray-300">
+            Mais de 10 anos de experiência em serviços de chaveiro.
+            Atendimento rápido e seguro para residências, veículos
+            e empresas em Betim e região.
+          </p>
+
+          <a
+            href="/politicas"
+            className="text-[#C9A24D] hover:brightness-110 transition text-sm"
+          >
+            Política de Privacidade
+          </a>
+
+          {/* REDES */}
           <div className="flex gap-4 mt-4">
             <a
-              href="https://www.instagram.com/thebrothersbetim/"
+              href="https://www.instagram.com/"
               target="_blank"
-              className="p-2 rounded-full bg-red-600 hover:bg-red-700 transition opacity-90"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full bg-[#C9A24D] text-black hover:brightness-110 transition"
             >
               <FaInstagram size={20} />
             </a>
+
             <a
-              href="https://wa.me/5531987741463?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20hamburgueria%20e%20gostaria%20de%20fazer%20um%20pedido.%20%0AAcesse%20nosso%20iFood:%20https%3A%2F%2Fwww.ifood.com.br%2Fdelivery%2Fbetim-mg%2Fthe-brothers-burguers-angola%2F24644122-0506-43a8-b9ac-839089919b85"
+              href="https://wa.me/5531992311011"
               target="_blank"
-              className="p-2 rounded-full bg-red-600 hover:bg-red-700 transition opacity-90"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full bg-[#C9A24D] text-black hover:brightness-110 transition"
             >
               <FaWhatsapp size={20} />
             </a>
           </div>
         </div>
 
-
         {/* CONTATO */}
-        <div className="flex flex-col gap-4 opacity-90">
-          <h3 className="text-xl font-semibold text-red-600 opacity-90">Contato</h3>
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl font-semibold text-[#C9A24D]">
+            Contato
+          </h3>
 
-          <div className="flex items-center gap-3 text-gray-200">
-            <FaMapMarkerAlt className="text-red-600 opacity-90 " />
-            <span>Rua do Rosário, 1091 — Betim/MG</span>
+          <div className="flex items-center gap-3 text-gray-300 text-sm">
+            <FaMapMarkerAlt className="text-[#C9A24D]" />
+            <span>Atendimento em Betim e região</span>
           </div>
 
-          <div className="flex items-center gap-3 text-gray-200 opacity-90">
-            <FaEnvelope className="text-red-600 opacity-90" />
-            <span>thebrothersbetim@gmail.com</span>
+          <div className="flex items-center gap-3 text-gray-300 text-sm">
+            <FaEnvelope className="text-[#C9A24D]" />
+            <span>contato@hpchaveiro.com.br</span>
           </div>
 
-          <div className="flex items-center gap-3 text-gray-200 opacity-90">
-            <FaWhatsapp className="text-red-600 opacity-90" />
-            <span>(031) 987741463</span>
+          <div className="flex items-center gap-3 text-gray-300 text-sm">
+            <FaWhatsapp className="text-[#C9A24D]" />
+            <span>(31) 9 9231-1011</span>
           </div>
+        </div>
+
+        {/* ATENDIMENTO */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl font-semibold text-[#C9A24D]">
+            Atendimento
+          </h3>
+
+          <p className="text-sm text-gray-300 leading-relaxed">
+            Disponibilidade 24 horas para emergências.
+            Abertura de portas, chaves automotivas,
+            cópias codificadas e troca de fechaduras.
+          </p>
+
+          <a
+            href="https://wa.me/5531992311011"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              inline-block
+              mt-2
+              bg-[#C9A24D]
+              text-black
+              px-6 py-3
+              rounded-full
+              font-bold
+              text-sm
+              hover:brightness-110
+              transition
+            "
+          >
+            Chamar no WhatsApp
+          </a>
         </div>
       </div>
 
       {/* COPYRIGHT */}
-      <div translate="no" className="w-full border-t border-red-600 opacity-90 mt-12 pt-6 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} The Brothers — Todos os direitos reservados.
+      <div
+        translate="no"
+        className="
+          w-full
+          border-t border-[#C9A24D]/30
+          mt-12 pt-6
+          text-center
+          text-sm
+          text-gray-400
+        "
+      >
+        © {new Date().getFullYear()} HP Chaveiro — Todos os direitos reservados.
       </div>
     </footer>
   );

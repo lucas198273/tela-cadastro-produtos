@@ -1,149 +1,100 @@
 "use client";
+
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-
-
-
+import { Menu, X, Phone } from "lucide-react";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-
-
   const closeMenu = () => setOpen(false);
 
   return (
-    <header className="w-full bg-[#FFF7F0] border-b border-red-100 fixed top-0 left-0 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-3 md:py-4">
-{/* LOGO + FUNDO PRETO */}
-<div
-  className="
-    rounded-2xl h-16 bg-black 
-    w-full sm:w-[90%] md:w-[30%] mr-3
-    flex items-center justify-center gap-4
-    px-3 md:px-4 py-2
-  "
->
-  {/* LOGO TEXTO */}
-  <Link
-    to="/"
-    translate="no"
-    className="text-lg md:text-xl font-extrabold tracking-wide text-white whitespace-nowrap"
-  >
-    THE BROTHERS
-  </Link>
+    <header className="w-full bg-black fixed top-0 left-0 z-50 border-b border-yellow-600/30">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-3">
 
-
-</div>
+        {/* LOGO */}
+        <div className="flex items-center">
+          <Link
+            to="/"
+            translate="no"
+            className="text-xl md:text-2xl font-extrabold tracking-wide text-yellow-500"
+          >
+            HP <span className="text-white">Chaveiro</span>
+          </Link>
+        </div>
 
         {/* MENU DESKTOP */}
-        <nav
-          className="
-            hidden md:flex items-center 
-            gap-6 lg:gap-8 
-            font-semibold text-red-900
-          "
-        >
-          <a
-            href="#unidade"
-            className="hover:text-red-600 transition text-sm lg:text-base"
-          >
-            UNIDADES
+        <nav className="hidden md:flex items-center gap-8 font-semibold text-white">
+          <a href="#servicos" className="hover:text-yellow-400 transition">
+            Serviços
           </a>
 
-          <a
-            href="#cardapio"
-            className="hover:text-red-600 transition text-sm lg:text-base"
-          >
-            CARDÁPIO
+          <a href="#sobre" className="hover:text-yellow-400 transition">
+            Sobre
           </a>
 
-          <a
-            href="#sobre"
-            className="hover:text-red-600 transition text-sm lg:text-base"
-          >
-            QUEM SOMOS
+          <a href="#atendimento" className="hover:text-yellow-400 transition">
+            Atendimento 24h
           </a>
 
-          {/* DELIVERY */}
+          {/* BOTÃO WHATSAPP */}
           <a
-            href="#plataformas"
-            className="
-              bg-red-600 opacity-90 text-white 
-              px-3 py-2 
-              rounded-full font-bold shadow-md 
-              hover:bg-red-600 transition 
-              flex items-center gap-2
-              text-sm lg:text-base
-            "
-          >
-            🚴 DELIVERY
-          </a>
-
-          {/* WHATSAPP */}
-          <a
-            href="https://wa.me/5531987741463?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20hamburgueria%20e%20gostaria%20de%20fazer%20um%20pedido.%20%0AAcesse%20nosso%20iFood:%20https%3A%2F%2Fwww.ifood.com.br%2Fdelivery%2Fbetim-mg%2Fthe-brothers-burguers-angola%2F24644122-0506-43a8-b9ac-839089919b85"
+            href="https://wa.me/5531999999999?text=Olá!%20Preciso%20de%20um%20chaveiro%20agora."
             target="_blank"
             rel="noopener noreferrer"
             className="
-              bg-red-700 text-white 
-              px-3 py-2 
-              rounded-full font-bold shadow-md 
-              hover:bg-red-600 transition 
+              bg-yellow-500 text-black
+              px-5 py-2 rounded-full
+              font-bold shadow-md
+              hover:bg-yellow-400 transition
               flex items-center gap-2
-              text-sm lg:text-base
             "
           >
-            Pedir no WhatsApp
+            <Phone size={18} />
+            Chamar no WhatsApp
           </a>
         </nav>
 
         {/* BOTÃO MOBILE */}
         <button
-          className="md:hidden p-2 text-red-700"
+          className="md:hidden text-yellow-500"
           onClick={() => setOpen(!open)}
         >
-          {open ? <X size={28} /> : <Menu size={28} />}
+          {open ? <X size={30} /> : <Menu size={30} />}
         </button>
       </div>
 
       {/* MENU MOBILE */}
       {open && (
-        <div className="md:hidden bg-[#FFF7F0] border-t border-red-100 px-6 py-5 flex flex-col gap-6 text-lg font-semibold text-red-900">
-
-          <a href="#unidade" onClick={closeMenu} className="hover:text-red-600 transition">UNIDADES</a>
-          <a href="#cardapio" onClick={closeMenu} className="hover:text-red-600 transition">CARDÁPIO</a>
-          <a href="#sobre" onClick={closeMenu} className="hover:text-red-600 transition">QUEM SOMOS</a>
-
-          {/* DELIVERY */}
-          <a
-            href="#plataformas"
-            onClick={closeMenu}
-            className="
-              bg-red-600 opacity-90 
-              text-white px-6 py-3 
-              rounded-full font-bold shadow-md 
-              hover:bg-red-600 transition 
-              flex items-center gap-2
-            "
-          >
-            🚴 DELIVERY
+        <div className="md:hidden bg-black border-t border-yellow-600/30 px-6 py-6 flex flex-col gap-6 text-lg font-semibold text-white">
+          <a href="#servicos" onClick={closeMenu} className="hover:text-yellow-400 transition">
+            Serviços
           </a>
 
-          {/* WHATSAPP */}
+          <a href="#sobre" onClick={closeMenu} className="hover:text-yellow-400 transition">
+            Sobre
+          </a>
+
+          <a href="#atendimento" onClick={closeMenu} className="hover:text-yellow-400 transition">
+            Atendimento 24h
+          </a>
+
+          {/* WHATSAPP MOBILE */}
           <a
-            href="https://wa.me/5531987741463?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20hamburgueria%20e%20gostaria%20de%20fazer%20um%20pedido.%20%0AAcesse%20nosso%20iFood:%20https%3A%2F%2Fwww.ifood.com.br%2Fdelivery%2Fbetim-mg%2Fthe-brothers-burguers-angola%2F24644122-0506-43a8-b9ac-839089919b85"
+            href="https://wa.me/5531999999999?text=Olá!%20Preciso%20de%20um%20chaveiro%20agora."
             target="_blank"
             rel="noopener noreferrer"
+            onClick={closeMenu}
             className="
-              bg-red-700 
-              text-white px-6 py-3 
-              rounded-full font-bold shadow-md 
-              hover:bg-red-600 transition 
-              flex items-center gap-2
+              bg-yellow-500 text-black
+              px-6 py-3 rounded-full
+              font-bold shadow-md
+              hover:bg-yellow-400 transition
+              flex items-center justify-center gap-2
             "
           >
-            Pedir no WhatsApp
+            <Phone size={20} />
+            Chamar no WhatsApp
           </a>
         </div>
       )}

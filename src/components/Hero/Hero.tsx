@@ -12,80 +12,110 @@ export default function Hero() {
   return (
     <>
       <Helmet>
-        <title>The Brothers | Peça no iFood</title>
+        <title>HP Chaveiro 24h | Socorro Imediato em Betim</title>
         <meta
           name="description"
-          content="Peça The Brothers no iFood — entrega rápida, sabor artesanal e classicão sem mistério."
+          content="HP Chaveiro 24h em Betim. Atendimento imediato para residências, veículos e empresas. Cópia de chaves, troca de fechaduras e emergência."
         />
 
-        <meta property="og:title" content="The Brothers — Peça no iFood" />
+        <meta property="og:title" content="HP Chaveiro 24h" />
         <meta
           property="og:description"
-          content="Hambúrguer artesanal direto para sua casa. Confira nosso cardápio no iFood."
+          content="Chaveiro profissional 24 horas. Atendimento rápido, seguro e de confiança."
         />
         <meta property="og:image" content="/assets/imgs/logo.webp" />
         <meta property="og:type" content="website" />
       </Helmet>
 
-      {/* SECTION RED + CLEAN */}
-      <section id="home" className="relative w-full flex items-center justify-center px-10 py-20 md:py-32 bg-black text-white overflow-hidden">
-        <div className="flex flex-col-reverse md:flex-row w-full max-w-6xl items-center gap-12">
-          {/* TEXTOS */}
+      {/* HERO */}
+      <section
+        id="home"
+        className="
+          relative w-full 
+          flex items-center justify-center 
+          px-6 py-20 md:py-32 
+          bg-white text-black 
+          overflow-hidden
+        "
+      >
+        <div className="flex flex-col-reverse md:flex-row w-full max-w-6xl items-center gap-16">
+
+          {/* TEXTO */}
           <div
             className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6"
             data-aos="fade-up"
           >
-            <h1 translate="no" className="text-4xl md:text-6xl font-extrabold leading-tight text-white tracking-wide">
-              The Brothers
-              <span translate="no" className="text-red-600 opacity-80"> Delivery</span>
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
+              <span className="text-black">HP</span>{" "}
+              <span className="text-[#C9A24D]">Chaveiro</span>
             </h1>
 
-            <p className="text-base md:text-lg text-white opacity-90 max-w-md leading-relaxed">
-              Agora ficou ainda mais fácil receber seu hambúrguer artesanal com sabor direto ao ponto.
-              Entrega rápida, qualidade total e aquele padrão Brothers que você já conhece.
+            <h2 className="text-lg md:text-2xl font-semibold text-gray-900">
+              Chaveiro <span className="text-[#C9A24D]">24 Horas</span> em Betim e Região
+            </h2>
+
+            <p className="text-base md:text-lg text-gray-700 max-w-md leading-relaxed">
+              Atendimento rápido e profissional para residências, veículos e empresas.
+              Soluções seguras em chaves, fechaduras e emergências 24h.
             </p>
-            <div className="flex  sm:flex-row gap-4 mt-4">
-                  <img
-                  src="/assets/imgs/logo.webp"
-                  alt="The Brothers Logo"
-                  className="w-20 h-20 sm:w-20 sm:h-20 md:w-20 md:h-20 object-contain float pulse"
-                />
-                  {/* LOGO */}
-                <img
-                  src="/assets/imgs/logo2.webp"
-                  alt="The Brothers Logo"
-                  className="w-20 h-20 sm:w-20 sm:h-20 md:w-20 md:h-20 object-contain float pulse"
-                />
-           </div>
 
-        
+            {/* LISTA DE SERVIÇOS */}
+            <ul className="space-y-2 text-sm md:text-base text-gray-800">
+              <li>Cópia de chaves comuns e codificadas</li>
+              <li>Chaves automotivas</li>
+              <li>Abertura de portas e troca de fechaduras</li>
+              <li>Amolamento de alicates</li>
+              <li>Socorro emergencial 24 horas</li>
+            </ul>
 
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              <a
+                href="#contato"
+                className="
+                  bg-[#C9A24D] text-white 
+                  px-7 py-3 rounded-full 
+                  font-bold shadow-lg 
+                  hover:brightness-110 transition
+                "
+              >
+                Solicitar Atendimento
+              </a>
 
-
+              <a
+                href="https://wa.me/5531992311011"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  border-2 border-black 
+                  text-black px-7 py-3 
+                  rounded-full font-bold 
+                  hover:bg-black hover:text-white transition
+                "
+              >
+                Atendimento via WhatsApp
+              </a>
+            </div>
           </div>
 
           {/* IMAGEM */}
-          
-        <div
-  className="w-full md:w-1/2 flex justify-center float"
-  data-aos="fade-left"
->
-  <img
-    src="/assets/imgs/image.png"
-    alt="The Brothers — Hambúrguer artesanal"
-    className="
-     
-      w-[85%]               /* MOBILE maior */
-      sm:w-[90%]            /* TABLET leve ajuste */
-      md:w-[90%]            /* DESKTOP */
-      max-w-md
-      rounded-xl shadow-xl shadow-amber-700
-      object-cover
-      transition-transform duration-300 hover:scale-105
-    "
-  />
-</div>
-
+          <div
+            className="w-full md:w-1/2 flex justify-center"
+            data-aos="fade-left"
+          >
+            <img
+              src="/assets/flyhero.png"
+              alt="HP Chaveiro 24h em Betim"
+              className="
+                w-[65%] sm:w-[60%] md:w-[60%]
+                max-w-md
+                rounded-2xl 
+                shadow-xl shadow-[#C9A24D]/30
+                object-cover
+                transition-transform duration-300 hover:scale-105
+              "
+            />
+          </div>
         </div>
       </section>
     </>

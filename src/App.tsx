@@ -6,7 +6,7 @@ import "./App.css";
 
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
-import About from "./components/About/About";
+import TrustSection from "./components/TrustSection/TrustSection.tsx";
 import Footer from "./components/Footer/Footer";
 
 import ScrollTop from "./components/ScrollTop/ScrollTop";
@@ -14,10 +14,10 @@ import ScrollToTopOnRouteChange from "./components/ScrollToTopOnRouteChange/Scro
 
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import PoliticaEPrivacidade from "./pages/PoliticasEPrivacidade";
-import MenuShowCase from "./components/MenuShowCase/MenuShowCase";
-import SingleUnit from "./components/SingleUnit/SingleUnit";
-import InstagramGrid from "./components/InstagramGrid/InstagramGrid";
-import DeliveryLinks from "./components/DeliveryLinks/DeliveryLinks";
+import Services from "./components/Services/Services";
+import Differentials from "./components/Differentials/Differentials";
+import ExperienceSection from "./components/ExperienceSection/ExperienceSection.tsx";
+import HowItWorks from "./components/HowItWorks/HowItWorks.tsx";
 
 function AppContent() {
   useEffect(() => {
@@ -82,18 +82,20 @@ function AppContent() {
 
               <main className="pt-14 min-h-screen flex flex-col">
                 <Hero />
-                <MenuShowCase />
-                <DeliveryLinks />
-                <SingleUnit />
-                <About />
-                <InstagramGrid />
+
+                <Services />
+                <Differentials />
+                <TrustSection/>
+                <ExperienceSection />
+                <HowItWorks />
+              
               </main>
             </>
           }
         />
 
         {/* ===================== OUTRAS PÁGINAS ===================== */}
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<TrustSection />} />
         <Route path="/Politicas" element={<PoliticaEPrivacidade />} />
       </Routes>
 
