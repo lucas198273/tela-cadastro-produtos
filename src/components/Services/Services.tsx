@@ -6,31 +6,31 @@ const services = [
   {
     title: "Chaveiro 24 Horas",
     description:
-      "Atendimento imediato para emergências, dia e noite, com rapidez e segurança.",
+      "Atendimento imediato para emergências 24h, com deslocamento rápido e solução no local, residencial ou automotivo.",
     icon: ShieldCheck,
   },
   {
-    title: "Cópia de Chaves",
+    title: "Abertura de Portas",
     description:
-      "Cópias de chaves comuns, residenciais e comerciais com precisão.",
-    icon: Key,
-  },
-  {
-    title: "Chaves Automotivas",
-    description:
-      "Cópia e programação de chaves automotivas, nacionais e importadas.",
-    icon: Car,
-  },
-  {
-    title: "Troca de Fechaduras",
-    description:
-      "Substituição e manutenção de fechaduras para maior segurança.",
+      "Abertura de portas residenciais, comerciais e automotivas sem danos à fechadura.",
     icon: Home,
   },
   {
-    title: "Amolamento de Alicates",
+    title: "Abertura de Veículos",
     description:
-      "Serviço profissional de amolamento para ferramentas de precisão.",
+      "Carros trancados? Realizamos abertura automotiva com técnicas seguras e profissionais.",
+    icon: Car,
+  },
+  {
+    title: "Chave Quebrada na Fechadura",
+    description:
+      "Remoção de chave quebrada em portas, cilindros e tambor automotivo com total cuidado.",
+    icon: Key,
+  },
+  {
+    title: "Troca e Manutenção de Fechaduras",
+    description:
+      "Troca de segredos, cilindros e fechaduras para reforçar a segurança do seu imóvel ou veículo.",
     icon: Wrench,
   },
 ];
@@ -48,8 +48,8 @@ export default function Services() {
             Nossos <span className="text-[#C9A24D]">Serviços</span>
           </h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-            Soluções completas em chaveiro, com atendimento rápido,
-            profissional e de confiança.
+            Serviços especializados em chaveiro, com atendimento rápido,
+            seguro e profissional para emergências e manutenções.
           </p>
         </div>
 

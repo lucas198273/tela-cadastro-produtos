@@ -40,44 +40,48 @@ function AppContent() {
           path="/"
           element={
             <>
-             <Helmet>
+        <Helmet>
   {/* ================= SEO BÁSICO ================= */}
-  <title>The Brothers Burguer | Hambúrguer Artesanal em Betim</title>
+  <title>Chaveiro 24h em Betim | Abertura de Portas, Troca de Fechaduras</title>
 
   <meta
     name="description"
-    content="The Brothers Burguer — Hambúrguer artesanal feito com blend especial, pão macio, ingredientes frescos e muito sabor. Peça online e descubra a melhor experiência em Betim."
+    content="Chaveiro 24h em Betim e região. Abertura de portas, troca de fechaduras, cópia de chaves e atendimento rápido no local. Segurança, agilidade e preço justo."
   />
 
   <meta
     name="keywords"
-    content="hambúrguer artesanal, hamburgueria betim, the brothers burguer, smash burger, burger artesanal, comida artesanal, hamburguer delivery"
+    content="chaveiro betim, chaveiro 24h betim, abertura de portas, troca de fechaduras, cópia de chaves, chaveiro residencial, chaveiro automotivo, chaveiro urgente"
   />
 
-  <link rel="canonical" href="https://thebrothers-site.online" />
+  <link rel="canonical" href="https://seudominio.com.br" />
 
   {/* ================= OPEN GRAPH ================= */}
   <meta property="og:type" content="website" />
+
   <meta
     property="og:title"
     translate="no"
-    content="The Brothers Burguer | Hambúrguer Artesanal em Betim"
+    content="Chaveiro 24h em Betim | Atendimento Rápido e Seguro"
   />
+
   <meta
     property="og:description"
     translate="no"
-    content="Hambúrguer artesanal feito com blend especial e ingredientes frescos. Peça online e descubra a melhor experiência em Betim."
-  />
-  <meta
-    property="og:image"
-    content="https://thebrothers-site.online/og-image.jpg"
-  />
-  <meta
-    property="og:url"
-    content="https://thebrothers-site.online"
+    content="Precisa de um chaveiro agora? Atendimento 24h em Betim para abertura de portas, troca de fechaduras e serviços emergenciais."
   />
 
+  <meta
+    property="og:image"
+    content="https://seudominio.com.br/og-image.jpg"
+  />
+
+  <meta
+    property="og:url"
+    content="https://seudominio.com.br"
+  />
 </Helmet>
+
 
 
               <main className="pt-14 min-h-screen flex flex-col">
