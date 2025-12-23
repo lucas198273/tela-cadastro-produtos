@@ -44,7 +44,7 @@ const steps = [
 export default function HowItWorks() {
   return (
     <section
-      id="como-funciona"
+      id="atendimento"
       className="w-full bg-white py-20 px-6 md:px-10"
     >
       <div className="max-w-6xl mx-auto">

@@ -29,9 +29,7 @@ export default function Header() {
             Serviços
           </a>
 
-          <a href="#sobre" className="hover:text-yellow-400 transition">
-            Sobre
-          </a>
+        
 
           <a href="#atendimento" className="hover:text-yellow-400 transition">
             Atendimento 24h
@@ -71,9 +69,7 @@ export default function Header() {
             Serviços
           </a>
 
-          <a href="#sobre" onClick={closeMenu} className="hover:text-yellow-400 transition">
-            Sobre
-          </a>
+          
 
           <a href="#atendimento" onClick={closeMenu} className="hover:text-yellow-400 transition">
             Atendimento 24h
