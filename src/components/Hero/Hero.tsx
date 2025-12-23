@@ -59,14 +59,7 @@ export default function Hero() {
               Soluções seguras em chaves, fechaduras e emergências 24h.
             </p>
 
-            {/* LISTA DE SERVIÇOS */}
-            <ul className="space-y-2 text-sm md:text-base text-gray-800">
-              <li>Cópia de chaves comuns e codificadas</li>
-              <li>Chaves automotivas</li>
-              <li>Abertura de portas e troca de fechaduras</li>
-              <li>Amolamento de alicates</li>
-              <li>Socorro emergencial 24 horas</li>
-            </ul>
+        
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
@@ -104,7 +97,7 @@ export default function Hero() {
             data-aos="fade-left"
           >
             <img
-              src="/assets/flyhero.png"
+              src="/assets/flys/flyhero.png"
               alt="HP Chaveiro 24h em Betim"
               className="
                 w-[65%] sm:w-[60%] md:w-[60%]

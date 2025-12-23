@@ -18,6 +18,7 @@ import Services from "./components/Services/Services";
 import Differentials from "./components/Differentials/Differentials";
 import ExperienceSection from "./components/ExperienceSection/ExperienceSection.tsx";
 import HowItWorks from "./components/HowItWorks/HowItWorks.tsx";
+import FlyersSection from "./components/FlyersSection/FlyersSection.tsx";
 
 function AppContent() {
   useEffect(() => {
@@ -89,6 +90,8 @@ function AppContent() {
 
                 <Services />
                 <Differentials />
+                <FlyersSection />
+
                 <TrustSection/>
                 <ExperienceSection />
                 <HowItWorks />

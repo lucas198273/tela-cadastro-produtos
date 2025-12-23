@@ -52,3 +52,90 @@ html {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 }
+/* ================================
+   FLYERS CAROUSEL (GLOBAL)
+   Escopo: #flyers
+================================ */
+
+/* Scroll horizontal suave */
+#flyers [data-aos] {
+  will-change: transform, opacity;
+}
+
+/* Esconde scrollbar (Chrome, Edge, Safari) */
+#flyers .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Esconde scrollbar (Firefox) */
+#flyers .scrollbar-hide {
+  scrollbar-width: none;
+}
+
+/* Container do carrossel */
+#flyers .flyers-track {
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+}
+
+/* Card do flyer */
+#flyers .flyer-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+#flyers .flyer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagem */
+#flyers img {
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ================================
+   BOTÕES DE NAVEGAÇÃO
+================================ */
+
+/* Base do botão */
+#flyers .flyer-nav-btn {
+  background: #000;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover desktop */
+@media (hover: hover) {
+  #flyers .flyer-nav-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Active mobile */
+#flyers .flyer-nav-btn:active {
+  transform: scale(0.95);
+}
+
+/* Ícone dourado */
+#flyers .flyer-nav-btn svg {
+  color: #d4af37;
+}
+
+/* ================================
+   RESPONSIVIDADE
+================================ */
+
+/* Ajustes mobile */
+@media (max-width: 768px) {
+  #flyers {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  #flyers .flyer-card {
+    border-radius: 1.25rem;
+  }
+}

@@ -33,21 +33,27 @@ const services = [
       "Troca de segredos, cilindros e fechaduras para reforçar a segurança do seu imóvel ou veículo.",
     icon: Wrench,
   },
+  {
+  title: "Amolamento de Alicates",
+  description:
+    "Serviço profissional de amolamento e ajuste de alicates, restaurando o corte, a precisão e a eficiência da ferramenta.",
+  icon: Wrench,
+  },
 ];
 
 export default function Services() {
   return (
     <section
       id="servicos"
-      className="w-full bg-white py-20 px-6 md:px-10"
+      className="w-full bg-black py-20 px-6 md:px-10"
     >
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-black">
-            Nossos <span className="text-[#C9A24D]">Serviços</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white">
+            Nossos <span className="text-[#bc8f2c]">Serviços</span>
           </h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-white opacity-95 max-w-2xl mx-auto">
             Serviços especializados em chaveiro, com atendimento rápido,
             seguro e profissional para emergências e manutenções.
           </p>
