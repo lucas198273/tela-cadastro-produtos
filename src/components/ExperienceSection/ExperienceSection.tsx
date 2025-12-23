@@ -35,7 +35,7 @@ export default function ExperienceSection() {
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-black">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white">
             Mais de <span className="text-[#C9A24D]">10 anos de experiência</span>
           </h2>
           <p className="mt-4 text-white opacity-95 max-w-2xl mx-auto">
