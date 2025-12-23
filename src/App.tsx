@@ -43,7 +43,7 @@ function AppContent() {
             <>
         <Helmet>
   {/* ================= SEO BÁSICO ================= */}
-  <title>Chaveiro 24h em Betim | Abertura de Portas, Troca de Fechaduras</title>
+  <title>Chaveiro 24h em Betim | Abertura de Portas, Troca de Fechaduras, Socorro 24h em Betim</title>
 
   <meta
     name="description"
@@ -74,7 +74,7 @@ function AppContent() {
 
   <meta
     property="og:image"
-    content="https://seudominio.com.br/og-image.jpg"
+    content="https://seudominio.com.br/og-image.png"
   />
 
   <meta
