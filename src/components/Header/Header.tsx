@@ -12,24 +12,29 @@ export default function Header() {
     <header className="w-full bg-black fixed top-0 left-0 z-50 border-b border-yellow-600/30">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-3">
 
-        {/* LOGO */}
-        <div className="flex items-center">
-          <Link
-            to="/"
-            translate="no"
-            className="text-xl md:text-2xl font-extrabold tracking-wide text-yellow-500"
-          >
-            HP <span className="text-white">Chaveiro</span>
-          </Link>
-        </div>
+        {/* LOGO IMAGEM */}
+        <Link
+          to="/"
+          className="flex items-center gap-2"
+          aria-label="Página inicial"
+        >
+          <img
+            src="/assets/imagechave.png" 
+            alt="Logo HP Chaveiro"
+            className="
+              h-10 md:h-12 float
+              w-auto 
+              object-contain
+              drop-shadow-[0_0_10px_rgba(234,179,8,0.25)]
+            "
+          />
+        </Link>
 
         {/* MENU DESKTOP */}
         <nav className="hidden md:flex items-center gap-8 font-semibold text-white">
           <a href="#servicos" className="hover:text-yellow-400 transition">
             Serviços
           </a>
-
-        
 
           <a href="#atendimento" className="hover:text-yellow-400 transition">
             Atendimento 24h
@@ -68,8 +73,6 @@ export default function Header() {
           <a href="#servicos" onClick={closeMenu} className="hover:text-yellow-400 transition">
             Serviços
           </a>
-
-          
 
           <a href="#atendimento" onClick={closeMenu} className="hover:text-yellow-400 transition">
             Atendimento 24h
