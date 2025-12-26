@@ -57,7 +57,7 @@ export default function Hero() {
             </h2>
 
             {/* DESCRIÇÃO */}
-            <p className="text-gray-700 md:text-gray-300 text-base md:text-lg max-w-md leading-relaxed">
+            <p className="text-gray-900 md:text-gray-100 text-base md:text-lg max-w-md leading-relaxed">
               Atendimento rápido e profissional para residências, veículos e empresas.
               Soluções seguras em chaves, fechaduras e emergências 24h.
             </p>
