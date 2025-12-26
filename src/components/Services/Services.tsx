@@ -45,15 +45,15 @@ export default function Services() {
   return (
     <section
       id="servicos"
-      className="w-full bg-black py-20 px-6 md:px-10"
+      className="w-full  bg-gradient-to-t from-black to-white py-20 px-6 md:px-10"
     >
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-black opacity-80">
             Nossos <span className="text-[#bc8f2c]">Serviços</span>
           </h2>
-          <p className="mt-4 text-white opacity-95 max-w-2xl mx-auto">
+          <p className="mt-4 text-gray-900 opacity-95 max-w-2xl mx-auto">
             Serviços especializados em chaveiro, com atendimento rápido,
             seguro e profissional para emergências e manutenções.
           </p>

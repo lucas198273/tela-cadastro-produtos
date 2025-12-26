@@ -19,7 +19,7 @@ export default function Header() {
           aria-label="Página inicial"
         >
           <img
-            src="/assets/imagechave.png" 
+            src="/assets/imagechave.webp" 
             alt="Logo HP Chaveiro"
             className="
               h-10 md:h-12 float

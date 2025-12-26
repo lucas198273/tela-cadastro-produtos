@@ -45,7 +45,8 @@ export default function Hero() {
           >
             {/* LOGO */}
             <img
-              src="/assets/selo3.png"
+              loading="lazy"
+              src="/assets/selo3.webp"
               alt="HP Chaveiro - Logo"
               className=" float w-32 md:w-48 drop-shadow-lg"
             />
@@ -87,7 +88,7 @@ export default function Hero() {
             data-aos="fade-left"
           >
             <img
-              src="/assets/flys/flyhero.png"
+              src="/assets/flys/flyhero.webp"
               alt="HP Chaveiro 24h em Betim"
               className="w-2/3 sm:w-3/5 md:w-3/5 max-w-md rounded-2xl shadow-xl shadow-[#C9A24D]/30 object-cover transition-transform duration-300 hover:scale-105"
             />

@@ -11,13 +11,13 @@ interface Flyer {
 }
 
 const flyers: Flyer[] = [
-  { id: 1, image: "/assets/flys/image1.png" },
-  { id: 2, image: "/assets/flys/image2.png" },
-  { id: 3, image: "/assets/flys/image3.png" },
-  { id: 4, image: "/assets/flys/image4.png" },
-  { id: 5, image: "/assets/flys/image6.png" },
-  { id: 6, image: "/assets/flys/image7.png" },
-  { id: 6, image: "/assets/flys/image8.png" },
+  { id: 1, image: "/assets/flys/image1.webp" },
+  { id: 2, image: "/assets/flys/image2.webp" },
+  { id: 3, image: "/assets/flys/image3.webp" },
+  { id: 4, image: "/assets/flys/image4.webp" },
+  { id: 5, image: "/assets/flys/image6.webp" },
+  { id: 6, image: "/assets/flys/image7.webp" },
+  { id: 7, image: "/assets/flys/image8.webp" },
 ];
 
 export default function FlyersCarousel() {

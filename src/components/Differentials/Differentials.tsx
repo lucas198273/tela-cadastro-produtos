@@ -38,16 +38,16 @@ export default function Differentials() {
   return (
     <section
       id="diferenciais"
-      className="w-full bg-white py-20 px-6 md:px-10"
+      className="w-full bg-gradient-to-t from-white to-black  py-20 px-6 md:px-10"
     >
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-black">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white opacity-890">
             Por que escolher a{" "}
             <span className="text-[#C9A24D]">HP Chaveiro</span>
           </h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-white opacity-80 max-w-2xl mx-auto">
             Compromisso com qualidade, rapidez e segurança em cada atendimento.
           </p>
         </div>
