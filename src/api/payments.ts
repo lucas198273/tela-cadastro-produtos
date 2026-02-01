@@ -1,84 +1,85 @@
-/* ================================
- * Tipos de pagamento aceitos
- * ================================ */
-export type PaymentMethod = "pix" | "card" | "boleto";
+// services/payments.ts
 
-/* ================================
- * Pagador (usado somente no PIX)
- * ================================ */
-export interface Payer {
-  email: string;
-  first_name: string;
-  last_name: string;
-  cpf: string;
-}
+// Detecção de ambiente (uma única vez)
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const APP_ENV = import.meta.env.VITE_APP_ENV || (import.meta.env.DEV ? "development" : "production");
 
-/* ================================
- * Payload enviado ao backend
- * ================================ */
+// Log inicial de configuração (aparece só uma vez)
+console.log(
+  `%c[Pagamento] Ambiente: ${APP_ENV.toUpperCase()} | API: ${API_URL}`,
+  APP_ENV === "development"
+    ? "background: #0f0; color: black; padding: 4px 8px; border-radius: 4px;"
+    : "background: #f00; color: white; padding: 4px 8px; border-radius: 4px;"
+);
+
+// Tipos
+export type PaymentMethod = "card" | "pix" | "any";
+
 export interface CreatePaymentPayload {
   amount: number;
-  method: PaymentMethod;
+  method?: PaymentMethod;          // opcional (InfinitePay ignora)
   description?: string;
-
-  // 👉 obrigatório apenas para PIX
-  payer?: Payer;
+  payer?: {
+    first_name: string;
+    last_name?: string;
+    email: string;
+    cpf?: string;
+  };
+  order_nsu?: string;              // recomendado para rastreamento
 }
 
-/* ================================
- * Respostas do backend
- * ================================ */
-
-// PIX
-export interface PixPaymentResponse {
-  type: "pix";
-  qr_code: string;
-  qr_code_base64: string;
+export interface PaymentResponse {
+  type: "infinitepay_checkout";
+  link: string;
+  order_nsu?: string;
+  slug?: string;                   // para debug/polling futuro
 }
 
-// Cartão ou Boleto
-export interface RedirectPaymentResponse {
-  type: "card" | "boleto";
-  init_point: string;
-}
-
-export type PaymentResponse =
-  | PixPaymentResponse
-  | RedirectPaymentResponse;
-
-/* ================================
- * Configuração da API
- * ================================ */
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-/* ================================
- * Criar pagamento
- * ================================ */
+// Função principal
 export async function createPayment(
   payload: CreatePaymentPayload
 ): Promise<PaymentResponse> {
-  const response = await fetch(
-    `${API_URL}/api/payments/create`,
-    {
+  const envTag = `[${APP_ENV.toUpperCase()}]`;
+
+  console.log(`${envTag} Enviando pagamento InfinitePay:`, payload);
+
+  try {
+    const response = await fetch(`${API_URL}/api/payments/create`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-Frontend-Env": APP_ENV,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error(`${envTag} Erro do backend:`, errorData);
+      throw new Error(
+        errorData.error ||
+        errorData.details ||
+        errorData.message ||
+        `Erro HTTP ${response.status}`
+      );
     }
-  );
 
-  if (!response.ok) {
-    let errorMessage = "Erro ao criar pagamento";
+    const json = await response.json();
 
-    try {
-      const error = await response.json();
-      errorMessage = error?.error || errorMessage;
-    } catch {}
+    if (!json.link) {
+      throw new Error("Link de pagamento não retornado pelo backend");
+    }
 
-    throw new Error(errorMessage);
+    console.log(
+      `${envTag} Sucesso! Link:`,
+      json.link.length > 60 ? json.link.slice(0, 57) + "..." : json.link
+    );
+
+    return json as PaymentResponse;
+  } catch (err) {
+    console.error(`${envTag} Falha na requisição:`, err);
+    throw err instanceof Error
+      ? err
+      : new Error("Falha desconhecida ao criar pagamento");
   }
-
-  return response.json();
 }
