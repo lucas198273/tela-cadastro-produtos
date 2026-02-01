@@ -1,47 +1,55 @@
 // services/payments.ts
 
-// Detecção de ambiente (uma única vez)
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const APP_ENV = import.meta.env.VITE_APP_ENV || (import.meta.env.DEV ? "development" : "production");
 
-// Log inicial de configuração (aparece só uma vez)
 console.log(
   `%c[Pagamento] Ambiente: ${APP_ENV.toUpperCase()} | API: ${API_URL}`,
   APP_ENV === "development"
-    ? "background: #0f0; color: black; padding: 4px 8px; border-radius: 4px;"
-    : "background: #f00; color: white; padding: 4px 8px; border-radius: 4px;"
+    ? "background:#0f0;color:#000;padding:4px 8px;border-radius:4px;"
+    : "background:#f00;color:#fff;padding:4px 8px;border-radius:4px;"
 );
 
-// Tipos
-export type PaymentMethod = "card" | "pix" | "any";
-
 export interface CreatePaymentPayload {
-  amount: number;
-  method?: PaymentMethod;          // opcional (InfinitePay ignora)
+  amount: number;              // em centavos (ex: 15075 para R$ 150,75)
   description?: string;
-  payer?: {
-    first_name: string;
-    last_name?: string;
-    email: string;
-    cpf?: string;
-  };
-  order_nsu?: string;              // recomendado para rastreamento
+  name: string;                // nome completo do pagador
+  email: string;
+  order_nsu?: string;
 }
 
 export interface PaymentResponse {
   type: "infinitepay_checkout";
   link: string;
   order_nsu?: string;
-  slug?: string;                   // para debug/polling futuro
+  slug?: string;
 }
 
-// Função principal
-export async function createPayment(
-  payload: CreatePaymentPayload
-): Promise<PaymentResponse> {
-  const envTag = `[${APP_ENV.toUpperCase()}]`;
+function normalizePayload(payload: CreatePaymentPayload) {
+  if (!payload.name.trim() || !payload.email.trim()) {
+    throw new Error("Nome e e-mail são obrigatórios");
+  }
 
-  console.log(`${envTag} Enviando pagamento InfinitePay:`, payload);
+  if (!payload.amount || payload.amount <= 0 || !Number.isInteger(payload.amount)) {
+    throw new Error("Valor deve ser inteiro positivo em centavos");
+  }
+
+  return {
+    amount: payload.amount,
+    description: payload.description ?? "Pagamento via InfinitePay",
+    order_nsu: payload.order_nsu ?? `chk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    customer: {
+      name: payload.name.trim(),
+      email: payload.email.trim().toLowerCase(),
+    },
+  };
+}
+
+export async function createPayment(payload: CreatePaymentPayload): Promise<PaymentResponse> {
+  const envTag = `[${APP_ENV.toUpperCase()}]`;
+  const normalized = normalizePayload(payload);
+
+  console.log(`${envTag} Enviando payload normalizado:`, normalized);
 
   try {
     const response = await fetch(`${API_URL}/api/payments/create`, {
@@ -50,36 +58,25 @@ export async function createPayment(
         "Content-Type": "application/json",
         "X-Frontend-Env": APP_ENV,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(normalized),
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error(`${envTag} Erro do backend:`, errorData);
-      throw new Error(
-        errorData.error ||
-        errorData.details ||
-        errorData.message ||
-        `Erro HTTP ${response.status}`
-      );
-    }
 
     const json = await response.json();
 
-    if (!json.link) {
-      throw new Error("Link de pagamento não retornado pelo backend");
+    if (!response.ok) {
+      const errorDetail = json.error || json.details || json.message || JSON.stringify(json, null, 2) || `Status ${response.status}`;
+      console.error(`${envTag} Erro do backend (status ${response.status}):`, errorDetail);
+      throw new Error(errorDetail);
     }
 
-    console.log(
-      `${envTag} Sucesso! Link:`,
-      json.link.length > 60 ? json.link.slice(0, 57) + "..." : json.link
-    );
+    if (!json.link) {
+      throw new Error("Link de pagamento não retornado pela InfinitePay");
+    }
 
+    console.log(`${envTag} Checkout gerado:`, json.link);
     return json as PaymentResponse;
   } catch (err) {
-    console.error(`${envTag} Falha na requisição:`, err);
-    throw err instanceof Error
-      ? err
-      : new Error("Falha desconhecida ao criar pagamento");
+    console.error(`${envTag} Falha completa na requisição:`, err);
+    throw err instanceof Error ? err : new Error("Falha desconhecida ao criar pagamento");
   }
 }

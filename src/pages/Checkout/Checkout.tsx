@@ -1,6 +1,6 @@
 // Checkout.tsx
 import { useState } from "react";
-import { createPayment,  type PaymentResponse } from "../../api/payments"; // ajuste o path se necessário
+import { createPayment, type PaymentResponse } from "../../api/payments"; // ajuste o caminho se necessário
 
 export default function Checkout() {
   const [amount, setAmount] = useState<string>("");
@@ -13,37 +13,43 @@ export default function Checkout() {
   const handlePayment = async () => {
     setError(null);
 
-    const valor = Number(amount);
-    if (!amount || isNaN(valor) || valor <= 0) {
+    // Aceita vírgula ou ponto como separador decimal (comum no Brasil)
+    const cleanAmount = amount.replace(",", ".");
+    const valorReais = Number(cleanAmount);
+
+    if (!cleanAmount || isNaN(valorReais) || valorReais <= 0) {
       setError("Informe um valor válido maior que zero.");
       return;
     }
 
-    if (!firstName.trim() || !email.trim()) {
-      setError("Preencha nome e e-mail para agilizar o checkout.");
+    if (!firstName.trim()) {
+      setError("O nome é obrigatório.");
+      return;
+    }
+
+    if (!email.trim() || !email.includes("@") || !email.includes(".")) {
+      setError("Informe um e-mail válido.");
       return;
     }
 
     setLoading(true);
 
     try {
+      const nomeCompleto = firstName.trim() + (lastName.trim() ? ` ${lastName.trim()}` : "");
+
       const data: PaymentResponse = await createPayment({
-        amount: valor,
-        method: "any", // InfinitePay unifica PIX + cartão
+        amount: Math.round(valorReais * 100), // converte para centavos aqui
         description: "Pagamento via InfinitePay",
-        payer: {
-          first_name: firstName.trim(),
-          last_name: lastName.trim() || undefined,
-          email: email.trim(),
-        },
-        order_nsu: `checkout-${Date.now()}`, // Gere do seu sistema real (ex: ID do pedido)
+        name: nomeCompleto || "Cliente",
+        email: email.trim().toLowerCase(),
+        order_nsu: `chk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       });
 
       // Redireciona para o checkout da InfinitePay
       window.location.href = data.link;
     } catch (err: any) {
-      console.error("Erro no pagamento InfinitePay:", err);
-      setError(err.message || "Erro ao iniciar pagamento. Tente novamente.");
+      console.error("Erro ao processar pagamento:", err);
+      setError(err.message || "Não foi possível iniciar o pagamento. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -56,10 +62,9 @@ export default function Checkout() {
       {/* Valor */}
       <label className="block mb-2 font-medium">Valor (R$)</label>
       <input
-        type="number"
-        step="0.01"
-        min="1"
-        placeholder="Ex: 58.00"
+        type="text"
+        inputMode="decimal"
+        placeholder="Ex: 58,00 ou 58.00"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         className="w-full border border-gray-300 p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -69,7 +74,7 @@ export default function Checkout() {
       {/* Nome e Sobrenome */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block mb-1 font-medium text-sm">Nome</label>
+          <label className="block mb-1 font-medium text-sm">Nome *</label>
           <input
             type="text"
             placeholder="Seu nome"
@@ -83,7 +88,7 @@ export default function Checkout() {
           <label className="block mb-1 font-medium text-sm">Sobrenome</label>
           <input
             type="text"
-            placeholder="Sobrenome"
+            placeholder="Sobrenome (opcional)"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -93,7 +98,7 @@ export default function Checkout() {
       </div>
 
       {/* E-mail */}
-      <label className="block mb-2 font-medium">E-mail</label>
+      <label className="block mb-2 font-medium">E-mail *</label>
       <input
         type="email"
         placeholder="seu@email.com"
@@ -103,9 +108,10 @@ export default function Checkout() {
         disabled={loading}
       />
 
-      {/* Info sobre o fluxo */}
+      {/* Informação */}
       <p className="text-sm text-gray-600 mb-6">
-        Você será redirecionado para o checkout seguro da InfinitePay. Escolha PIX (instantâneo) ou cartão de crédito (parcelado em até 12x). Recebimento antecipado na hora ou em 1 dia útil.
+        Você será redirecionado para o checkout seguro da InfinitePay (PIX instantâneo ou cartão em até 12x).  
+        Recebimento na hora ou em 1 dia útil.
       </p>
 
       {/* Erro */}
@@ -118,13 +124,14 @@ export default function Checkout() {
       {/* Botão */}
       <button
         onClick={handlePayment}
-        disabled={loading || !amount || !firstName.trim() || !email.trim()}
+        disabled={loading || !amount.trim() || !firstName.trim() || !email.trim()}
         className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? (
           <span className="flex items-center justify-center">
             <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
             </svg>
             Processando...
           </span>
@@ -135,7 +142,8 @@ export default function Checkout() {
 
       {/* Segurança */}
       <p className="text-xs text-gray-500 mt-6 text-center">
-        Pagamento processado de forma segura pela InfinitePay. Alta taxa de aprovação e proteção antifraude. Seus dados nunca passam pelo nosso servidor.
+        Pagamento processado de forma segura pela InfinitePay.  
+        Seus dados nunca passam pelo nosso servidor.
       </p>
     </div>
   );
