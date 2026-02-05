@@ -1,9 +1,9 @@
 // src/pages/Checkout.tsx
 import { useState, useEffect } from 'react';
-import { createPayment, type PaymentResponse } from '../../api/payments';
+import { createPayment, type PaymentResponse } from '../../api/payments'; // ajuste o caminho se necessário
 
 export default function Checkout() {
-  const [amountStr, setAmountStr] = useState<string>(''); // exibe como string formatada: "597,00"
+  const [amountStr, setAmountStr] = useState<string>(''); // exibe como "597,00"
   const [planName, setPlanName] = useState<string>('Plano Selecionado');
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -14,27 +14,35 @@ export default function Checkout() {
     const saved = localStorage.getItem('selectedPlan');
     if (saved) {
       try {
-        const { priceCents, planName: name } = JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        const priceCents = Number(parsed.priceCents);
 
-        // priceCents vem em centavos → converte para reais e formata BR
-        const valorReais = Number(priceCents) / 100;
-        if (isNaN(valorReais) || valorReais <= 0) {
+        console.log('[DEBUG Checkout] Valor cru do localStorage (priceCents):', priceCents);
+        console.log('[DEBUG Checkout] Tipo do priceCents:', typeof priceCents);
+
+        if (isNaN(priceCents) || priceCents <= 0) {
           console.warn('Valor inválido no localStorage:', priceCents);
           setAmountStr('0,00');
           return;
         }
 
-        // Formatação brasileira: 597.00 → "597,00"
+        // Converte centavos para reais e formata BR
+        const valorReais = priceCents / 100;
         const formatted = valorReais
-          .toFixed(2)
-          .replace('.', ',')
-          .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+          .toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+          .replace(/\u00A0/g, ' '); // corrige espaço não-quebrável que o toLocaleString pode gerar
+
+        console.log('[DEBUG Checkout] Valor em reais calculado:', valorReais);
+        console.log('[DEBUG Checkout] Valor formatado para exibição:', formatted);
 
         setAmountStr(formatted);
-        setPlanName(name || 'Plano Selecionado');
+        setPlanName(parsed.planName || 'Plano Selecionado');
         localStorage.removeItem('selectedPlan');
       } catch (err) {
-        console.error('Erro ao ler selectedPlan do localStorage:', err);
+        console.error('Erro ao parsear selectedPlan do localStorage:', err);
         setAmountStr('0,00');
       }
     }
@@ -43,12 +51,15 @@ export default function Checkout() {
   const handlePayment = async () => {
     setError(null);
 
-    // Converte a string exibida de volta para número em reais
+    // Remove pontos de milhar e troca vírgula por ponto
     const cleanAmount = amountStr.replace(/\./g, '').replace(',', '.');
     const valorReais = Number(cleanAmount);
 
+    console.log('[DEBUG Pagamento] amountStr exibido:', amountStr);
+    console.log('[DEBUG Pagamento] valorReais após limpeza:', valorReais);
+
     if (isNaN(valorReais) || valorReais <= 0 || valorReais > 100000) {
-      setError('Valor inválido ou acima do limite.');
+      setError('Valor inválido ou acima do limite permitido.');
       return;
     }
 
@@ -65,8 +76,9 @@ export default function Checkout() {
     setLoading(true);
 
     try {
-      // Converte para centavos (o que a InfinitePay espera)
+      // Única conversão: reais → centavos
       const amountInCents = Math.round(valorReais * 100);
+      console.log('[DEBUG Pagamento] amountInCents enviado para createPayment:', amountInCents);
 
       const response: PaymentResponse = await createPayment({
         amount: amountInCents,
@@ -76,7 +88,8 @@ export default function Checkout() {
         order_nsu: `plan-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       });
 
-      // Redireciona para o link de checkout da InfinitePay
+      console.log('[DEBUG Pagamento] Link recebido da API:', response.link);
+
       window.location.href = response.link;
     } catch (err: any) {
       console.error('Erro ao processar pagamento:', err);
@@ -93,7 +106,7 @@ export default function Checkout() {
       <div className="mb-8 p-6 bg-gray-50 rounded-xl text-center">
         <h2 className="text-xl font-semibold mb-2">{planName}</h2>
         <p className="text-4xl font-bold text-green-600">
-          R$ {amountStr || '0,00'}
+          {amountStr ? `R$ ${amountStr}` : 'R$ 0,00'}
         </p>
       </div>
 
@@ -153,8 +166,7 @@ export default function Checkout() {
         </button>
 
         <p className="text-xs text-gray-500 text-center mt-6">
-          Pagamento processado com segurança pela InfinitePay.
-          <br />
+          Pagamento processado com segurança pela InfinitePay.<br />
           Seus dados são criptografados e protegidos.
         </p>
       </div>
