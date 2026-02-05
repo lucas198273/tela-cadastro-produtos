@@ -1,150 +1,163 @@
-// Checkout.tsx
-import { useState } from "react";
-import { createPayment, type PaymentResponse } from "../../api/payments"; // ajuste o caminho se necessário
+// src/pages/Checkout.tsx
+import { useState, useEffect } from 'react';
+import { createPayment, type PaymentResponse } from '../../api/payments';
 
 export default function Checkout() {
-  const [amount, setAmount] = useState<string>("");
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [loading, setLoading] = useState(false);
+  const [amountStr, setAmountStr] = useState<string>(''); // exibe como string formatada: "597,00"
+  const [planName, setPlanName] = useState<string>('Plano Selecionado');
+  const [fullName, setFullName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('selectedPlan');
+    if (saved) {
+      try {
+        const { priceCents, planName: name } = JSON.parse(saved);
+
+        // priceCents vem em centavos → converte para reais e formata BR
+        const valorReais = Number(priceCents) / 100;
+        if (isNaN(valorReais) || valorReais <= 0) {
+          console.warn('Valor inválido no localStorage:', priceCents);
+          setAmountStr('0,00');
+          return;
+        }
+
+        // Formatação brasileira: 597.00 → "597,00"
+        const formatted = valorReais
+          .toFixed(2)
+          .replace('.', ',')
+          .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        setAmountStr(formatted);
+        setPlanName(name || 'Plano Selecionado');
+        localStorage.removeItem('selectedPlan');
+      } catch (err) {
+        console.error('Erro ao ler selectedPlan do localStorage:', err);
+        setAmountStr('0,00');
+      }
+    }
+  }, []);
 
   const handlePayment = async () => {
     setError(null);
 
-    // Aceita vírgula ou ponto como separador decimal (comum no Brasil)
-    const cleanAmount = amount.replace(",", ".");
+    // Converte a string exibida de volta para número em reais
+    const cleanAmount = amountStr.replace(/\./g, '').replace(',', '.');
     const valorReais = Number(cleanAmount);
 
-    if (!cleanAmount || isNaN(valorReais) || valorReais <= 0) {
-      setError("Informe um valor válido maior que zero.");
+    if (isNaN(valorReais) || valorReais <= 0 || valorReais > 100000) {
+      setError('Valor inválido ou acima do limite.');
       return;
     }
 
-    if (!firstName.trim()) {
-      setError("O nome é obrigatório.");
+    if (!fullName.trim()) {
+      setError('Nome completo é obrigatório.');
       return;
     }
 
-    if (!email.trim() || !email.includes("@") || !email.includes(".")) {
-      setError("Informe um e-mail válido.");
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
+      setError('E-mail inválido.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const nomeCompleto = firstName.trim() + (lastName.trim() ? ` ${lastName.trim()}` : "");
+      // Converte para centavos (o que a InfinitePay espera)
+      const amountInCents = Math.round(valorReais * 100);
 
-      const data: PaymentResponse = await createPayment({
-        amount: Math.round(valorReais * 100), // converte para centavos aqui
-        description: "Pagamento via InfinitePay",
-        name: nomeCompleto || "Cliente",
+      const response: PaymentResponse = await createPayment({
+        amount: amountInCents,
+        description: `Pagamento - ${planName}`,
+        name: fullName.trim(),
         email: email.trim().toLowerCase(),
-        order_nsu: `chk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        order_nsu: `plan-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       });
 
-      // Redireciona para o checkout da InfinitePay
-      window.location.href = data.link;
+      // Redireciona para o link de checkout da InfinitePay
+      window.location.href = response.link;
     } catch (err: any) {
-      console.error("Erro ao processar pagamento:", err);
-      setError(err.message || "Não foi possível iniciar o pagamento. Tente novamente.");
+      console.error('Erro ao processar pagamento:', err);
+      setError(err.message || 'Erro ao iniciar o pagamento. Tente novamente.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">Pagamento com InfinitePay</h1>
+    <div className="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-2xl my-12">
+      <h1 className="text-3xl font-bold text-center mb-8">Finalizar Compra</h1>
 
-      {/* Valor */}
-      <label className="block mb-2 font-medium">Valor (R$)</label>
-      <input
-        type="text"
-        inputMode="decimal"
-        placeholder="Ex: 58,00 ou 58.00"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className="w-full border border-gray-300 p-3 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
-        disabled={loading}
-      />
-
-      {/* Nome e Sobrenome */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block mb-1 font-medium text-sm">Nome *</label>
-          <input
-            type="text"
-            placeholder="Seu nome"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            disabled={loading}
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium text-sm">Sobrenome</label>
-          <input
-            type="text"
-            placeholder="Sobrenome (opcional)"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            disabled={loading}
-          />
-        </div>
+      <div className="mb-8 p-6 bg-gray-50 rounded-xl text-center">
+        <h2 className="text-xl font-semibold mb-2">{planName}</h2>
+        <p className="text-4xl font-bold text-green-600">
+          R$ {amountStr || '0,00'}
+        </p>
       </div>
 
-      {/* E-mail */}
-      <label className="block mb-2 font-medium">E-mail *</label>
-      <input
-        type="email"
-        placeholder="seu@email.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full border border-gray-300 p-3 rounded-lg mb-6 focus:outline-none focus:ring-2 focus:ring-green-500"
-        disabled={loading}
-      />
-
-      {/* Informação */}
-      <p className="text-sm text-gray-600 mb-6">
-        Você será redirecionado para o checkout seguro da InfinitePay (PIX instantâneo ou cartão em até 12x).  
-        Recebimento na hora ou em 1 dia útil.
-      </p>
-
-      {/* Erro */}
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-          {error}
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nome completo *
+          </label>
+          <input
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500 outline-none"
+            placeholder="Ex: Lucas Pereira"
+            disabled={loading}
+          />
         </div>
-      )}
 
-      {/* Botão */}
-      <button
-        onClick={handlePayment}
-        disabled={loading || !amount.trim() || !firstName.trim() || !email.trim()}
-        className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {loading ? (
-          <span className="flex items-center justify-center">
-            <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-              <path fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-            </svg>
-            Processando...
-          </span>
-        ) : (
-          "Pagar Agora"
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            E-mail *
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-3 focus:ring-green-500 focus:border-green-500 outline-none"
+            placeholder="seuemail@exemplo.com"
+            disabled={loading}
+          />
+        </div>
+
+        <p className="text-sm text-gray-500 leading-relaxed">
+          Você será redirecionado para o checkout seguro da InfinitePay.<br />
+          Aceitamos PIX instantâneo ou cartão em até 12x.<br />
+          Recebimento na hora ou em 1 dia útil.
+        </p>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-center">
+            {error}
+          </div>
         )}
-      </button>
 
-      {/* Segurança */}
-      <p className="text-xs text-gray-500 mt-6 text-center">
-        Pagamento processado de forma segura pela InfinitePay.  
-        Seus dados nunca passam pelo nosso servidor.
-      </p>
+        <button
+          onClick={handlePayment}
+          disabled={loading || !fullName.trim() || !email.trim() || !amountStr}
+          className={`
+            w-full py-4 rounded-xl font-bold text-lg transition
+            ${loading || !fullName.trim() || !email.trim() || !amountStr
+              ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+              : 'bg-green-600 text-white hover:bg-green-700'
+            }
+          `}
+        >
+          {loading ? 'Processando...' : 'Pagar Agora'}
+        </button>
+
+        <p className="text-xs text-gray-500 text-center mt-6">
+          Pagamento processado com segurança pela InfinitePay.
+          <br />
+          Seus dados são criptografados e protegidos.
+        </p>
+      </div>
     </div>
   );
 }
