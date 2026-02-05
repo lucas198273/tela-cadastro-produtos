@@ -33,7 +33,7 @@ function normalizePayload(payload: CreatePaymentPayload) {
   if (!payload.amount || payload.amount <= 0) {
     throw new Error('Valor deve ser maior que zero');
   }
-
+ 
   // Split name para first/last (backend espera payer com first_name/last_name)
   const nameParts = payload.name.trim().split(/\s+/);
   const firstName = nameParts[0] || 'Cliente';
