@@ -1,7 +1,9 @@
 // src/services/payments.ts
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const APP_ENV = import.meta.env.VITE_APP_ENV || (import.meta.env.DEV ? 'development' : 'production');
+const APP_ENV =
+  import.meta.env.VITE_APP_ENV ||
+  (import.meta.env.DEV ? 'development' : 'production');
 
 console.log(
   `%c[Pagamento Service] Ambiente: ${APP_ENV.toUpperCase()} | Backend: ${API_URL}`,
@@ -13,9 +15,9 @@ console.log(
 export interface CreatePaymentPayload {
   amount: number;          // em REAIS (ex: 150.75)
   description?: string;
-  name: string;            // nome completo (ex: "Lucas Pereira")
+  name: string;            // nome completo
   email: string;
-  order_nsu?: string;      // opcional, geramos se não vier
+  order_nsu?: string;
 }
 
 export interface PaymentResponse {
@@ -25,33 +27,41 @@ export interface PaymentResponse {
   order_nsu?: string;
 }
 
+// ===============================
+// Normalização do payload
+// ===============================
 function normalizePayload(payload: CreatePaymentPayload) {
-  if (!payload.name?.trim() || !payload.email?.trim()) {
-    throw new Error('Nome completo e e-mail são obrigatórios');
+  if (!payload.name?.trim()) {
+    throw new Error('Nome completo é obrigatório');
+  }
+
+  if (!payload.email?.trim()) {
+    throw new Error('E-mail é obrigatório');
   }
 
   if (!payload.amount || payload.amount <= 0) {
     throw new Error('Valor deve ser maior que zero');
   }
- 
-  // Split name para first/last (backend espera payer com first_name/last_name)
-  const nameParts = payload.name.trim().split(/\s+/);
-  const firstName = nameParts[0] || 'Cliente';
-  const lastName = nameParts.slice(1).join(' ') || '';
 
   return {
-    amount: payload.amount,  // envia em reais → backend converte
+    amount: payload.amount, // backend converte para centavos
     description: payload.description ?? 'Pagamento via InfinitePay',
-    order_nsu: payload.order_nsu ?? `chk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    payer: {
-      first_name: firstName,
-      last_name: lastName,
+    order_nsu:
+      payload.order_nsu ??
+      `chk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    customer: {
+      name: payload.name.trim(),
       email: payload.email.trim().toLowerCase(),
     },
   };
 }
 
-export async function createPayment(payload: CreatePaymentPayload): Promise<PaymentResponse> {
+// ===============================
+// Criar pagamento
+// ===============================
+export async function createPayment(
+  payload: CreatePaymentPayload
+): Promise<PaymentResponse> {
   const envTag = `[${APP_ENV.toUpperCase()}]`;
   const normalized = normalizePayload(payload);
 
@@ -74,21 +84,28 @@ export async function createPayment(payload: CreatePaymentPayload): Promise<Paym
         errorData.details ||
         errorData.message ||
         `Erro ${response.status}: ${response.statusText}`;
-      console.error(`${envTag} Erro backend (${response.status}):`, errorMsg, errorData);
+
+      console.error(
+        `${envTag} Erro backend (${response.status}):`,
+        errorMsg,
+        errorData
+      );
+
       throw new Error(errorMsg);
     }
 
     const json = await response.json();
 
-    if (!json.link || typeof json.link !== 'string' || !json.link.startsWith('http')) {
-      console.error(`${envTag} Resposta inválida (sem link válido):`, json);
-      throw new Error('Link de pagamento não retornado ou inválido');
+    if (!json.link || typeof json.link !== 'string') {
+      console.error(`${envTag} Resposta inválida:`, json);
+      throw new Error('Link de pagamento não retornado');
     }
 
     console.log(`${envTag} Sucesso! Link gerado: ${json.link}`);
     return json as PaymentResponse;
   } catch (err: unknown) {
-    const error = err instanceof Error ? err : new Error('Falha ao criar pagamento');
+    const error =
+      err instanceof Error ? err : new Error('Falha ao criar pagamento');
     console.error(`${envTag} Exceção completa:`, error);
     throw error;
   }
