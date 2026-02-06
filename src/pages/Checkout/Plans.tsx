@@ -9,8 +9,8 @@ export default function Plans() {
     {
       id: 1,
       name: 'Plano Básico',
-      price: 297.00,          // em reais
-      priceCents: 29700,      // em centavos (para envio)
+      price: 2.00,          // em reais
+      priceCents: 200,      // em centavos (para envio)
       description: 'Ideal para iniciantes',
       features: [
         'Integração simples com InfinitePay',
