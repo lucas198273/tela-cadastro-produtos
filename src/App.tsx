@@ -1,34 +1,87 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import Checkout from "./pages/Checkout/Checkout";     // caminho correto (ajuste se necessário)
-import Plans from "./pages/Checkout/Plans";           // caminho correto
+// src/App.tsx
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
+
+import Login from "./pages/Login";
+import ListProducts from "./pages/ListProducts";
+import ProductCreate from "./pages/ProductCreat";
+import ProductEdit from "./pages/ProductEdit";
+
+const useAuth = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem("adminAuth") === "true";
+  });
+
+  const login = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem("adminAuth", "true");
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("adminAuth");
+  };
+
+  return { isAuthenticated, login, logout };
+};
 
 function App() {
+  const { isAuthenticated, login, logout } = useAuth();
+
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-gray-100">
-        <Header />
+      <div className="min-h-screen bg-gray-50">
+        {isAuthenticated && (
+          <header className="bg-white shadow-sm border-b px-6 py-4 flex justify-between items-center">
+            <h1 className="text-xl font-bold text-gray-800">Gestão de Produtos</h1>
+            <button
+              onClick={logout}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Sair
+            </button>
+          </header>
+        )}
 
-        <main className="flex-1 pt-20 px-4">
+        <main className="p-6">
           <Routes>
-            {/* Página inicial = lista de planos */}
-            <Route path="/" element={<Plans />} />
+            {/* Rota de login - AGORA FUNCIONA! */}
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/products" replace />
+                ) : (
+                  <Login onLogin={login} />  // <-- ISSO AGORA FUNCIONA!
+                )
+              }
+            />
 
-            {/* Página de pagamento */}
-            <Route path="/checkout" element={<Checkout />} />
+            <Route
+              path="/products"
+              element={
+                isAuthenticated ? <ListProducts /> : <Navigate to="/login" replace />
+              }
+            />
 
-            {/* Opcional: rota 404 */}
-            <Route path="*" element={
-              <div className="text-center py-20">
-                <h1 className="text-4xl font-bold text-red-600">404</h1>
-                <p className="mt-4 text-xl">Página não encontrada</p>
-              </div>
-            } />
+            <Route
+              path="/products/new"
+              element={
+                isAuthenticated ? <ProductCreate /> : <Navigate to="/login" replace />
+              }
+            />        
+
+            <Route
+              path="/products/edit/:id"
+              element={
+                isAuthenticated ? <ProductEdit /> : <Navigate to="/login" replace />
+              }
+            />
+
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </main>
-
-        <Footer />
       </div>
     </Router>
   );
