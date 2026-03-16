@@ -2,13 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   css: {
-    postcss: {
-    
-    },
+    postcss: {},
   },
   build: {
     outDir: 'dist',
@@ -16,12 +13,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://ecomercce-ecomercce-app.q3o3kd.easypanel.host',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '/api/v1'),
       },
     },
   },
 });
-
-

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Login from "./pages/Login";
 import ListProducts from "./pages/ListProducts";
-import ProductCreate from "./pages/ProductCreat";
+import ProductCreate from "./pages/ProductCreate";
 import ProductEdit from "./pages/ProductEdit";
 
 const useAuth = () => {

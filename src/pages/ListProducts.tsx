@@ -1,90 +1,53 @@
 // src/pages/ProductList.tsx
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-// Tipagem mínima e realista do produto
-interface Produto {
-  id: string | number;
-  nome: string;
-  descricao: string;
-  preco: number;
-  preco_promocional?: number;
-  estoque: number;
-  sku?: string;
-  categoria: string;
-  ativo: boolean;
-  imagens?: string[];          // urls das imagens após upload (ou placeholders)
-  // peso_gramas?: number;     // pode adicionar mais campos se quiser mostrar
-}
+import { consultarProdutos, type Produto } from '../api/Produtos';
 
 export default function ProductList() {
   const navigate = useNavigate();
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [carregando, setCarregando] = useState(true);
-  const [erro] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
 
+  // Carregar produtos da API
   useEffect(() => {
-    // Futuro: fetch('/api/produtos') .then(...)
-    // Por enquanto: carrega do localStorage (persistência simples)
-
-    const salvos = localStorage.getItem('produtos_cadastrados');
-    let lista: Produto[] = [];
-
-    if (salvos) {
-      try {
-        lista = JSON.parse(salvos);
-      } catch (err) {
-        console.error('Erro ao parsear produtos do localStorage', err);
-      }
-    }
-
-    // Se não tiver nada, mostra alguns exemplos iniciais
-    if (lista.length === 0) {
-      lista = [
-        {
-          id: 'ex1',
-          nome: 'Camiseta Oversized Preta',
-          descricao: 'Algodão premium 180g, modelagem ampla, gola redonda',
-          preco: 89.90,
-          preco_promocional: 69.90,
-          estoque: 84,
-          sku: 'CAM-OVS-PTA-M',
-          categoria: 'camisetas',
-          ativo: true,
-          imagens: ['https://via.placeholder.com/400x400/111/eee?text=Camiseta+Preta'],
-        },
-        {
-          id: 'ex2',
-          nome: 'Calça Jeans Slim Masculina',
-          descricao: 'Elastano 2%, lavagem stone wash, corte moderno',
-          preco: 159.90,
-          estoque: 38,
-          sku: 'CAL-SLM-AZ-40',
-          categoria: 'calcas',
-          ativo: false,
-          imagens: ['https://via.placeholder.com/400x400/334/eee?text=Calca+Jeans'],
-        },
-      ];
-    }
-
-    setProdutos(lista);
-    setCarregando(false);
+    carregarProdutos();
   }, []);
+
+  const carregarProdutos = async () => {
+    try {
+      setCarregando(true);
+      const dados = await consultarProdutos();
+      console.log('📦 Produtos carregados:', dados);
+      setProdutos(dados);
+      setErro(null);
+    } catch (err: any) {
+      console.error('❌ Erro ao carregar produtos:', err);
+      setErro(err.message || 'Erro ao carregar produtos');
+    } finally {
+      setCarregando(false);
+    }
+  };
+
+  const handleExcluir = async (id: string) => {
+    if (!window.confirm('Deseja realmente excluir este produto?')) return;
+
+    try {
+      // await deletarProduto(id);
+      // Recarrega a lista após excluir
+      await carregarProdutos();
+    } catch (err: any) {
+      alert(`Erro ao excluir: ${err.message}`);
+    }
+  };
 
   const formatarPreco = (valor: number) =>
     valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-  const handleExcluir = (id: string | number) => {
-    if (!window.confirm('Deseja realmente excluir este produto?')) return;
-
-    const atualizados = produtos.filter(p => p.id !== id);
-    setProdutos(atualizados);
-    localStorage.setItem('produtos_cadastrados', JSON.stringify(atualizados));
-  };
-
   if (carregando) {
     return (
       <div className="py-12 text-center text-gray-600">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
         <p className="text-xl">Carregando produtos...</p>
       </div>
     );
@@ -92,8 +55,14 @@ export default function ProductList() {
 
   if (erro) {
     return (
-      <div className="py-12 text-center text-red-600">
-        <p className="text-xl">{erro}</p>
+      <div className="py-12 text-center">
+        <p className="text-xl text-red-600 mb-4">{erro}</p>
+        <button
+          onClick={carregarProdutos}
+          className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700"
+        >
+          Tentar novamente
+        </button>
       </div>
     );
   }
@@ -105,7 +74,7 @@ export default function ProductList() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Produtos</h1>
           <p className="mt-1 text-gray-600">
-            {produtos.length} produto{produtos.length !== 1 ? 's' : ''} cadastrado{produtos.length !== 1 ? 's' : ''}
+            {produtos.length} produto{produtos.length !== 1 ? 's' : ''} encontrado{produtos.length !== 1 ? 's' : ''}
           </p>
         </div>
 
@@ -123,7 +92,7 @@ export default function ProductList() {
       {produtos.length === 0 ? (
         <div className="bg-white rounded-2xl shadow p-12 text-center mx-4">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-            Nenhum produto cadastrado ainda
+            Nenhum produto encontrado
           </h2>
           <p className="text-gray-500 mb-8 max-w-md mx-auto">
             Comece adicionando seus produtos para aparecerem na loja
@@ -156,12 +125,7 @@ export default function ProductList() {
                   </div>
                 )}
 
-                {!produto.ativo && (
-                  <div className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                    Inativo
-                  </div>
-                )}
-
+                {/* Badge de promoção */}
                 {produto.preco_promocional && produto.preco_promocional < produto.preco && (
                   <div className="absolute top-3 right-3 bg-green-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
                     Promoção
@@ -198,8 +162,7 @@ export default function ProductList() {
                   </div>
 
                   <div className="text-sm text-gray-600 mb-4">
-                    Estoque: <span className="font-medium">{produto.estoque}</span>
-                    {produto.sku && <span className="ml-3 text-gray-500">SKU: {produto.sku}</span>}
+                    Material: {produto.material}
                   </div>
 
                   <div className="flex gap-3">
